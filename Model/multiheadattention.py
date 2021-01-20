@@ -31,11 +31,11 @@ class MultiHeadAttention(Layer):
         attention, _ = scaled_dot_product_attention(query, key, value, mask)
         attention = tf.transpose(attention, perm=[0, 2, 1, 3])
 
-        concat_attnetion = tf.reshape(attention, (batch_size, -1, self.d_model))
-        outputs = self.dense(concat_attnetion)
+        concat_attention = tf.reshape(attention, (batch_size, -1, self.d_model))
+        outputs = self.dense(concat_attention)
 
         return outputs
 
-    def create_padding_mask(x):
-        mask = tf.cast(tf.math.equal(x, 0), tf.float32)
-        return mask[:, tf.newaxis, tf.newaxis, :]
+def create_padding_mask(x):
+    mask = tf.cast(tf.math.equal(x, 0), tf.float32)
+    return mask[:, tf.newaxis, tf.newaxis, :]
