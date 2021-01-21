@@ -36,7 +36,7 @@ class PositionalEncoding(Layer):
         return tf.cast(pos_encoding, tf.float32)
 
     def call(self, inputs, **kwargs):
-        return inputs + self.pos_encoding[:, :tf.shape(inputs)[1], :]
+        return tf.keras.layers.Lambda(lambda inputs: inputs + self.pos_encoding[:, :tf.shape(inputs)[1], :])(inputs)
 
     def get_config(self):
         config = super(PositionalEncoding, self).get_config()
@@ -45,4 +45,3 @@ class PositionalEncoding(Layer):
             'd_model': self.d_model,
         })
         return config
-
