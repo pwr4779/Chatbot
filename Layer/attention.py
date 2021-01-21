@@ -13,5 +13,5 @@ def scaled_dot_product_attention(query, key, value, mask):
     attention_weights = tf.nn.softmax(scaled, axis=-1)
     output = tf.matmul(attention_weights, value)
 
-    return output, attention_weights
+    return output
 
