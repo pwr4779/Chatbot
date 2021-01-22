@@ -6,6 +6,7 @@ import tensorflow_datasets as tfds
 import tensorflow as tf
 from util import tokenize_and_filter
 from Layer.transformer import transformer
+from tensorflow.keras.callbacks import ModelCheckpoint
 import os
 urllib.request.urlretrieve("https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv", filename="../Dataset/ChatBotData.csv")
 train_data = pd.read_csv('../Dataset/ChatBotData.csv')
@@ -27,8 +28,6 @@ tokenizer = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus(
 START_TOKEN, END_TOKEN = [tokenizer.vocab_size], [tokenizer.vocab_size + 1]
 VOCAB_SIZE = tokenizer.vocab_size + 2
 # print(VOCAB_SIZE)
-sample_string = questions[20]
-
 questions, answers = tokenize_and_filter(tokenizer, questions, answers,START_TOKEN,END_TOKEN)
 
 BATCH_SIZE = 64
@@ -38,20 +37,20 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 train_dataset = tf.data.Dataset.from_tensor_slices((
     {
-        'inputs': questions[:10],
-        'dec_inputs': answers[:10, :-1] # 디코더의 입력
+        'inputs': questions[:split],
+        'dec_inputs': answers[:split, :-1] # 디코더의 입력
     },
     {
-        'outputs': answers[:10, 1:]  # 시작토큰 제거
+        'outputs': answers[:split, 1:]  # 시작토큰 제거
     },
 )).cache().shuffle(BUFFER_SIZE).batch(BATCH_SIZE).prefetch(AUTOTUNE)
 val_dataset = tf.data.Dataset.from_tensor_slices((
     {
-        'inputs': questions[split:split+10],
-        'dec_inputs': answers[split:split+10, :-1] # 디코더의 입력
+        'inputs': questions[split:],
+        'dec_inputs': answers[split:, :-1] # 디코더의 입력
     },
     {
-        'outputs': answers[split:split+10, 1:]  # 시작토큰 제거
+        'outputs': answers[split:, 1:]  # 시작토큰 제거
     },
 )).cache().batch(BATCH_SIZE).prefetch(AUTOTUNE)
 
@@ -107,19 +106,10 @@ learning_rate = CustomSchedule(D_MODEL)
 optimizer = tf.keras.optimizers.Adam(learning_rate, beta_1=0.9, beta_2=0.98, epsilon=1e-9)
 model.compile(optimizer=optimizer, loss=loss_function, metrics = [accuracy])
 
-# 파일 이름에 에포크 번호를 포함시킵니다(`str.format` 포맷)
-checkpoint_path = "training_2/cp-{epoch:04d}.ckpt"
-checkpoint_dir = os.path.dirname(checkpoint_path)
+path = './train/'
+ckpt_1 = 'tf_chkpoint.ckpt'
+cp_callback = ModelCheckpoint(filepath =  os.path.join(path, ckpt_1), monitor = 'val_accuracy', save_best_only = True, mode = 'max',verbose = 1, save_weights_only=True)
 
-# 다섯 번째 에포크마다 가중치를 저장하기 위한 콜백을 만듭니다
-cp_callback = tf.keras.callbacks.ModelCheckpoint(
-    filepath=checkpoint_path,
-    verbose=1,
-    save_weights_only=True,
-    period=5)
-
-history = model.fit(train_dataset, validation_data = val_dataset, epochs = 6,callback=[cp_callback])
+model.fit(train_dataset, validation_data = val_dataset, batch_size=32, epochs = 20,callbacks=[cp_callback])
 
 print(model.summary())
-
-
