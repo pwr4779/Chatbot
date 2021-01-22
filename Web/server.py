@@ -6,8 +6,6 @@ from Layer.transformer import transformer
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import os
-
-urllib.request.urlretrieve("https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv", filename="../Dataset/ChatBotData.csv")
 train_data = pd.read_csv('../Dataset/ChatBotData.csv')
 
 questions = []
@@ -43,9 +41,11 @@ model = transformer(
     num_heads=NUM_HEADS,
     dropout=DROPOUT)
 
-path = './train/'
-ckpt_1 = 'tf_chkpoint.ckpt'
-model.load_weights(os.path.join(path, ckpt_1))
+model.load_weights('./model/cp-0015.ckpt')
+def preprocess_sentence(sentence):
+  sentence = re.sub(r"([?.!,])", r" \1 ", sentence)
+  sentence = sentence.strip()
+  return sentence
 
 def evaluate(sentence):
   sentence = preprocess_sentence(sentence)
@@ -70,17 +70,13 @@ def predict(sentence):
 
   predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
-
-  print('Input: {}'.format(sentence))
-  print('Output: {}'.format(predicted_sentence))
   return predicted_sentence
 
 
-def preprocess_sentence(sentence):
-  sentence = re.sub(r"([?.!,])", r" \1 ", sentence)
-  sentence = sentence.strip()
-  return sentence
 
+
+# answer = model.predict(str('대학원 갈까?'))
+# print(answer)
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])
@@ -89,7 +85,7 @@ def index():
         return render_template('index.html')
     if request.method == 'POST':
         question  = (request.form['question'])
-        answer = model.predict(question)
+        answer = predict(str(question))
         return render_template('index.html', answer=answer)
 if __name__== '__main__':
     app.run(debug=True)

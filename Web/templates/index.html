@@ -5,15 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Material Design Bootstrap</title>
+  <title>YOLOBOT</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{url_for('static',  filename='css/bootstrap.min.css')}}" rel="stylesheet">
   <!-- Material Design Bootstrap -->
-  <link href="css/mdb.min.css" rel="stylesheet">
+  <link href="{{url_for('static',  filename='css/mdb.min.css')}}" rel="stylesheet">
   <!-- Your custom styles (optional) -->
-  <link href="css/style.min.css" rel="stylesheet">
+  <link href="{{url_for('static',  filename='css/style.min.css')}}" rel="stylesheet">
   <style type="text/css">
     html,
     body,
@@ -68,7 +68,7 @@
     <div class="container">
 
       <!-- Brand -->
-      <a class="navbar-brand" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
+      <a class="navbar-brand" href="https://github.com/pwr4779/Chatbot" target="_blank">
         <strong>YOLO CHATBOT</strong>
       </a>
 
@@ -156,7 +156,7 @@
                   <!-- Default form group -->
                       <!-- Default input -->
                       <div class="form-group">
-                          <input style="font-family: 'Nanum Barun Gothic'" type="text" name="rain_fall" class="form-control" id="formGroupExampleInput" placeholder="채팅을 입력해주세요.">
+                          <input style="font-family: 'Nanum Barun Gothic'" type="text" name="question" class="form-control" id="formGroupExampleInput" placeholder="채팅을 입력해주세요.">
                       </div>
                   <!-- Default form group -->
                   <button style="font-family: 'Nanum Barun Gothic' !important;" type="submit" class="btn btn-primary btn-md pull-right">전송</button>
@@ -169,10 +169,10 @@
               <!--Grid column-->
               <div class="col-lg-6 col-md-12">
 
-                <p class="h5 text-center mb-4" style="font-family: 'Nanum Barun Gothic'">예측 결과</p>
-                <!-- {% if price %} -->
-                  <h5 class="text-center mt-3">.</h5>
-                <!-- {% endif %} -->
+                <p class="h5 text-center mb-4" style="font-family: 'Nanum Barun Gothic'">YOLO CHAT</p>
+                {% if answer %}
+                  <h5 class="text-center mt-3">{{answer}}</h5>
+                {% endif %}
               </div>
               <!--/Grid column-->
 
@@ -210,13 +210,13 @@
 
   <!-- SCRIPTS -->
   <!-- JQuery -->
-  <script type="text/javascript" src="{{url_for('static', filenmae='js/jquery-3.4.1.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
   <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="{{url_for('static', filenmae='js/popper.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="{{url_for('static', filenmae='js/bootstrap.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="{{url_for('static', filenmae='js/mdb.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/mdb.min.js')}}"></script>
   <!-- Initializations -->
   <script type="text/javascript">
     // Animations initialization
