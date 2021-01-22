@@ -2,9 +2,11 @@
 Transformer을 활용한 한국어 챗봇
 
 * Demo
+
 ![Demo](./images/demo.gif)
 
 * Architecture
+
 ![Architecture](./images/model.png)
 
 #### Dataset
