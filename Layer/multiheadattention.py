@@ -40,6 +40,11 @@ class MultiHeadAttention(Layer):
         config.update({
             'num_heads':self.num_heads,
             'd_model':self.d_model,
+            'depth': self.depth,
+            'query_dense': self.query_dense,
+            'key_dense': self.key_dense,
+            'value_dense': self.value_dense,
+            'dense': self.dense
         })
         return config
 
