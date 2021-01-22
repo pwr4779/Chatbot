@@ -43,5 +43,6 @@ class PositionalEncoding(Layer):
         config.update({
             'pos': self.pos,
             'd_model': self.d_model,
+            'pos_encoding': self.pos_encoding,
         })
         return config
