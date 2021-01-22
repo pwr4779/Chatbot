@@ -42,9 +42,7 @@ model = transformer(
     dropout=DROPOUT)
 
 
-path = './train/'
-ckpt_1 = 'tf_chkpoint.ckpt'
-model.load_weights(os.path.join(path, ckpt_1))
+model.load_weights('./train/cp-0010.ckpt')
 def evaluate(sentence):
   sentence = preprocess_sentence(sentence)
 
@@ -69,8 +67,6 @@ def predict(sentence):
   predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
 
-  print('Input: {}'.format(sentence))
-  print('Output: {}'.format(predicted_sentence))
   return predicted_sentence
 
 
@@ -79,4 +75,5 @@ def preprocess_sentence(sentence):
   sentence = sentence.strip()
   return sentence
 
-output = predict("영화 볼래?")
+output = predict("취업할까?")
+print(output)
