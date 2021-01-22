@@ -6,7 +6,6 @@ import tensorflow_datasets as tfds
 import tensorflow as tf
 from util import tokenize_and_filter
 from Layer.transformer import transformer
-from tensorflow.keras.callbacks import ModelCheckpoint
 import os
 urllib.request.urlretrieve("https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv", filename="../Dataset/ChatBotData.csv")
 train_data = pd.read_csv('../Dataset/ChatBotData.csv')
@@ -32,7 +31,7 @@ questions, answers = tokenize_and_filter(tokenizer, questions, answers,START_TOK
 
 BATCH_SIZE = 64
 BUFFER_SIZE = 20000
-split = len(questions)-int(len(questions)/2)
+split = len(questions)-int(len(questions)/9)
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 train_dataset = tf.data.Dataset.from_tensor_slices((
@@ -106,10 +105,17 @@ learning_rate = CustomSchedule(D_MODEL)
 optimizer = tf.keras.optimizers.Adam(learning_rate, beta_1=0.9, beta_2=0.98, epsilon=1e-9)
 model.compile(optimizer=optimizer, loss=loss_function, metrics = [accuracy])
 
-path = './train/'
-ckpt_1 = 'tf_chkpoint.ckpt'
-cp_callback = ModelCheckpoint(filepath =  os.path.join(path, ckpt_1), monitor = 'val_accuracy', save_best_only = True, mode = 'max',verbose = 1, save_weights_only=True)
+# 파일 이름에 에포크 번호를 포함시킵니다(`str.format` 포맷)
+checkpoint_path = "train/cp-{epoch:04d}.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
 
-model.fit(train_dataset, validation_data = val_dataset, batch_size=32, epochs = 20,callbacks=[cp_callback])
+# 다섯 번째 에포크마다 가중치를 저장하기 위한 콜백을 만듭니다
+cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    filepath=checkpoint_path,
+    verbose=1,
+    save_weights_only=True,
+    period=5)
+model.fit(train_dataset, validation_data = val_dataset, epochs = 15,callbacks=[cp_callback])
 
 print(model.summary())
+
