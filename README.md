@@ -1,9 +1,11 @@
 ### Chatbot
 Transformer을 활용한 한국어 챗봇
 
-* Demo [Demo](./images/demo.gif)
+* Demo  
+![Demo](./images/demo.gif)
 
-* Architecture [Architecture](./images/model.png)
+* Architecture  
+![Architecture](./images/model.png)
 
 #### Dataset
 songys_chatbot_data[songys/chatbot_data](https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv)
