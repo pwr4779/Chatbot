@@ -8,7 +8,8 @@ Transformer을 활용한 한국어 챗봇
 ![Architecture](./images/model.png)
 
 #### Dataset
-songys_chatbot_data[songys/chatbot_data](https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv)
+songys님의 chatbot_data의 위로봇를 욜로봇으로 데이터를 수정하여 학습
+[songys/chatbot_data](https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData%20.csv)
 
 #### environment
 * RTX 3070 GPU X 1
